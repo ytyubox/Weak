@@ -35,7 +35,7 @@ final class UnownedTests:XCTestCase {
 	}
 	
 	static var allTests = [
-		("testExample", testUnowned),
+		("testUnowned", testUnowned),
 	]
 	
 }
