@@ -1,51 +1,8 @@
-# Only create a build job IF there is no tag in the commit
-if: tag IS blank
-# Only create a build job IF the branch is 'master'
-branches:
-  only:
-  - master
-# Set environment variables for the build job
-env:
-  global:
-  - SWIFT_BRANCH=swift-4.2-branch
-  - SWIFT_VERSION=swift-4.2-DEVELOPMENT-SNAPSHOT-2018-05-30-a
-  # PACKAGE_VERSION will be used by travis to create the Github release tag
-  - PACKAGE_VERSION=0.0.1
-jobs:
-  include:
-  # The first stage will run all unit tests using Ubuntu
-  - stage: Linux test
-    os: linux
-    language: generic
-    dist: trusty
-    sudo: required
-    install:
-    - sudo apt-get install clang libicu-dev
-    - mkdir swift
-    - curl https://swift.org/builds/$SWIFT_BRANCH/ubuntu1404/$SWIFT_VERSION/$SWIFT_VERSION-ubuntu14.04.tar.gz
-      -s | tar xz -C swift &> /dev/null
-    - export PATH="$(pwd)/swift/$SWIFT_VERSION-ubuntu14.04/usr/bin:$PATH"
-    script:
-    - swift package update
-    - swift test
-  # The second stage will run all tests on macOS
-  - stage: OSX test
-    os: osx
-    osx_image: xcode9.3
-    language: swift
-    sudo: required
-    install:
-    - wget https://swift.org/builds/$SWIFT_BRANCH/xcode/$SWIFT_VERSION/$SWIFT_VERSION-osx.pkg
-    - sudo installer -pkg $SWIFT_VERSION-osx.pkg -target /
-    - export PATH="/Library/Developer/Toolchains/$SWIFT_VERSION.xctoolchain/usr/bin:$PATH"
-    script:
-    - swift package update
-    - swift test
-  # The final stage will create a new Github tag using the version specified above, this will create
-  # a new release in Github
-  - stage: Set tag
-    script:
-    - git config --global user.email "builds@travis-ci.com"
-    - git config --global user.name "Travis CI"
-    - git tag $PACKAGE_VERSION
-    - git push --quiet https://$GH_TOKEN@github.com/beatsbears/Incrementer --tag > /dev/null 2>&1
+dist: trusty
+before_install:
+  - wget -q -O - https://swift.org/keys/all-keys.asc | gpg --import -
+  - wget https://swift.org/builds/ubuntu1404/swift-2.2-SNAPSHOT-2015-12-22-a/swift-2.2-SNAPSHOT-2015-12-22-a-ubuntu14.04.tar.gz
+  - tar xzf swift-2.2-SNAPSHOT-2015-12-22-a-ubuntu14.04.tar.gz
+  - export PATH=${PWD}/swift-2.2-SNAPSHOT-2015-12-22-a-ubuntu14.04/usr/bin:"${PATH}"
+script:
+  - swift build
