@@ -6,6 +6,7 @@ public protocol WeakProtocol {
 	
 	/// The object of `self`.
 	var object: Weaked? { get }
+	var isRefering:Bool {get}
 	
 }
 public struct Weak<Weaked: AnyObject>: WeakProtocol, ExpressibleByNilLiteral, CustomStringConvertible {
@@ -28,10 +29,13 @@ public struct Weak<Weaked: AnyObject>: WeakProtocol, ExpressibleByNilLiteral, Cu
 	}
 	
 	/// Creates an instance initialized with `nil`.
-	public init(nilLiteral: Void) {
+	public init(nilLiteral: ()) {
 		self.init()
 	}
 	
+	public var isRefering:Bool {
+		object != nil
+	}
 }
 
 extension Weak: Hashable, Equatable where Weaked:Hashable {
@@ -53,7 +57,15 @@ extension Sequence where Iterator.Element: AnyObject {
 	public var weak: [Weak<Iterator.Element>] {
 		return map(Weak.init)
 	}
-	
+}
+extension Array where Element:WeakProtocol {
+	public mutating func clearupReleased() {
+		for (i,v) in self.enumerated().reversed() {
+			if !v.isRefering {
+				remove(at: i)
+			}
+		}
+	}
 }
 
 /// Returns a Boolean value indicating whether two references point to the same object instance.
