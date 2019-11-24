@@ -1,13 +1,13 @@
-	/// A type that wraps an `Object` with a `weak` binding.
-	public protocol WeakProtocol {
-		
-		/// The object type of `Self`.
-		associatedtype Weaked: AnyObject
-		
-		/// The object of `self`.
-		var object: Weaked? { get }
-		
-	}
+/// A type that wraps an `Object` with a `weak` binding.
+public protocol WeakProtocol {
+	
+	/// The object type of `Self`.
+	associatedtype Weaked: AnyObject
+	
+	/// The object of `self`.
+	var object: Weaked? { get }
+	
+}
 public struct Weak<Weaked: AnyObject>: WeakProtocol, ExpressibleByNilLiteral, CustomStringConvertible {
 	
 	/// The object of `self`.
@@ -34,6 +34,9 @@ public struct Weak<Weaked: AnyObject>: WeakProtocol, ExpressibleByNilLiteral, Cu
 	
 }
 
+extension Weak: Hashable, Equatable where Weaked:Hashable {
+	
+}
 
 extension Sequence where Iterator.Element: WeakProtocol {
 	
@@ -54,7 +57,7 @@ extension Sequence where Iterator.Element: AnyObject {
 }
 
 /// Returns a Boolean value indicating whether two references point to the same object instance.
-public func === <W1: WeakProtocol, W2: WeakProtocol>(lhs: W1?, rhs: W2?) -> Bool {
+public func === <W1, W2>(lhs: W1?, rhs: W2?) -> Bool where  W1:WeakProtocol, W2:WeakProtocol {
 	return lhs?.object === rhs?.object
 }
 
