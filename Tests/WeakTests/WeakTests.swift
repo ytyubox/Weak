@@ -2,13 +2,18 @@ import XCTest
 @testable import Weak
 
 final class WeakTests: XCTestCase {
+	class SomeClass:NSObject { }
     func testWeak() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
+		let weakRef: Weak<SomeClass>
+		do {
+			let instance = SomeClass()
+			weakRef = Weak(instance)
+			XCTAssertNotNil(weakRef.object)
+		}
+		XCTAssertNil(weakRef.object)
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testExample", testWeak),
     ]
 }

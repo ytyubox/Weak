@@ -12,7 +12,7 @@ public protocol UnownedProtocol {
 	associatedtype UnownedObject: AnyObject
 	
 	/// The object of `self`.
-	var object: UnownedObject { get }
+	var object: UnownedObject! { get }
 	
 }
 
@@ -20,7 +20,7 @@ public protocol UnownedProtocol {
 public struct Unowned<UnowndObject: AnyObject>: UnownedProtocol, CustomStringConvertible {
 	
 	/// The object of `self`.
-	public unowned var object: UnowndObject
+	public unowned(unsafe) var object: UnowndObject!
 	
 	/// A textual representation of this instance.
 	public var description: String {
