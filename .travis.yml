@@ -1,8 +1,10 @@
-dist: trusty
-before_install:
-  - wget -q -O - https://swift.org/keys/all-keys.asc | gpg --import -
-  - wget https://swift.org/builds/ubuntu1404/swift-2.2-SNAPSHOT-2015-12-22-a/swift-2.2-SNAPSHOT-2015-12-22-a-ubuntu14.04.tar.gz
-  - tar xzf swift-2.2-SNAPSHOT-2015-12-22-a-ubuntu14.04.tar.gz
-  - export PATH=${PWD}/swift-2.2-SNAPSHOT-2015-12-22-a-ubuntu14.04/usr/bin:"${PATH}"
+os:
+  - osx
+language: swift
+osx_image: xcode11
+env:
+  - PROJECT_NAME=Weak
+install: (swift package update)
 script:
-  - swift build
+  - (swift build)
+  - (swift test)
