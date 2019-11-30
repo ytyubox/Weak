@@ -109,8 +109,8 @@ public func !== <W: WeakProtocol, U: UnownedProtocol>(lhs: W?, rhs: U?) -> Bool 
 }
 
 // Returns a Boolean value indicating whether two weak objects are equal.
-public func == <W: WeakProtocol>(lhs: W?, rhs: W?) -> Bool where W.Weaked: Equatable {
-	return lhs?.object == rhs?.object
+public func == <W: WeakProtocol>(lhs: W, rhs: W) -> Bool where W.Weaked: Equatable {
+	return lhs.object == rhs.object
 }
 
 /// Returns a Boolean value indicating whether a weak object and an optional object are equal.
@@ -121,11 +121,6 @@ public func == <W: WeakProtocol>(lhs: W?, rhs: W.Weaked?) -> Bool where W.Weaked
 /// Returns a Boolean value indicating whether an optional object and a weak object are equal.
 public func == <W: WeakProtocol>(lhs: W.Weaked?, rhs: W?) -> Bool where W.Weaked: Equatable {
 	return lhs == rhs?.object
-}
-
-// Returns a Boolean value indicating whether two weak objects are not equal.
-public func != <W: WeakProtocol>(lhs: W?, rhs: W?) -> Bool where W.Weaked: Equatable {
-	return lhs?.object != rhs?.object
 }
 
 /// Returns a Boolean value indicating whether a weak object and an optional object are not equal.

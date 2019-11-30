@@ -64,8 +64,16 @@ final class WeakTests: XCTestCase {
 		}
 		XCTAssertEqual(weakRef.description, "nil")
 	}
-	//	static var allTests = [
-	//		("testweak", testWeak),
-	//		("testSetClearupReleased", testSetClearupReleased),
-	//	]
+	func testWeakOptionalEquel() {
+		let someObject = SomeClass()
+		let weakRef1:Weak<SomeClass>? = Weak(someObject)
+		let weakRef2:Weak<SomeClass>? = Weak(someObject)
+		XCTAssertTrue(weakRef1 == weakRef2)
+		XCTAssertTrue(weakRef1 == someObject)
+		let optionalObjcet:SomeClass? = someObject
+		XCTAssertTrue(optionalObjcet == weakRef1)
+		XCTAssertFalse(weakRef1 != weakRef2)
+		XCTAssertFalse(weakRef1 != optionalObjcet)
+		XCTAssertFalse(optionalObjcet != weakRef1)
+	}
 }
