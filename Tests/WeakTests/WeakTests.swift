@@ -1,5 +1,5 @@
 import XCTest
-@testable import Weak
+import Weak
 
 final class WeakTests: XCTestCase {
 	class SomeClass:NSObject { }

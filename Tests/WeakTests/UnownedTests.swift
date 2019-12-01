@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import Weak
+import Weak
 
 final class UnownedTests:XCTestCase {
 	class PrintTarget{ var str:String = ""}

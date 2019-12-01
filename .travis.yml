@@ -8,6 +8,8 @@ install:
   - (swift package update)
 script:
   - (swift build)
-  - (swift test)
+  - (swift test --enable-code-coverage)
+  - swift package generate-xcodeproj --enable-code-coverage
+  - xcodebuild -scheme Weak-Package test
 after_success:
-  - curl -s https://codecov.io/bash | bash
+  - bash <(curl -s https://codecov.io/bash) 

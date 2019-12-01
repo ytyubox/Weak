@@ -20,7 +20,7 @@ public protocol UnownedProtocol {
 public struct Unowned<UnowndObject: AnyObject>: UnownedProtocol, CustomStringConvertible {
 	
 	/// The object of `self`.
-	public unowned(unsafe) var object: UnowndObject!
+	public unowned(safe) var object: UnowndObject!
 	
 	/// A textual representation of this instance.
 	public var description: String {
