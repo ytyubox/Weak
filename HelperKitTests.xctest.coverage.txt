@@ -1,0 +1,138 @@
+/Users/ios.yu/sbo-ios/lib/helperkit/HelperKitTests/ArrayTests.swift:
+    1|       |//
+    2|       |//  ArrayTests.swift
+    3|       |//  HelperKitTests
+    4|       |//
+    5|       |//  Created by 游宗諭 on 2019/11/17.
+    6|       |//  Copyright © 2019 ytyubox. All rights reserved.
+    7|       |//
+    8|       |
+    9|       |import XCTest
+   10|       |@testable import HelperKit
+   11|       |
+   12|       |class ArrayTests: XCTestCase {
+   13|       |
+   14|      0|	func testRotate() {
+   15|      0|		let resource =
+   16|      0|			[
+   17|      0|				[0, 1, 2, 3],
+   18|      0|				[4, 5, 6, 7]
+   19|      0|		]
+   20|      0|		let expect =
+   21|      0|			[
+   22|      0|				[0, 4],
+   23|      0|				[1, 5],
+   24|      0|				[2, 6],
+   25|      0|				[3, 7]
+   26|      0|		]
+   27|      0|
+   28|      0|		XCTAssertEqual(expect, rotate(resource))
+   29|      0|		let resource2 =
+   30|      0|			[
+   31|      0|				[0, 1, 2, 3],
+   32|      0|				[4, 5, 6]
+   33|      0|		]
+   34|      0|		let expect2 =
+   35|      0|			[
+   36|      0|				[0, 4],
+   37|      0|				[1, 5],
+   38|      0|				[2, 6],
+   39|      0|				[3]
+   40|      0|		]
+   41|      0|
+   42|      0|		XCTAssertEqual(expect2, rotate(resource2))
+   43|      0|		let resource3 =
+   44|      0|			[
+   45|      0|				[0, 1, 3],
+   46|      0|				[4, 5, 6, 7],
+   47|      0|				[8]
+   48|      0|		]
+   49|      0|		let expect3 =
+   50|      0|			[
+   51|      0|				[0, 4, 8],
+   52|      0|				[1, 5],
+   53|      0|				[3, 6],
+   54|      0|				[7]
+   55|      0|		]
+   56|      0|
+   57|      0|		XCTAssertEqual(expect3, rotate(resource3))
+   58|      0|	}
+   59|       |	struct ZippedForSortingTest: Comparable {
+   60|      0|		static func == (lhs: ZippedForSortingTest, rhs: ZippedForSortingTest) -> Bool { lhs.i == rhs.i }
+   61|       |
+   62|      0|		static func < (lhs: ZippedForSortingTest, rhs: ZippedForSortingTest) -> Bool { lhs.i < rhs.i}
+   63|       |		var i: Int
+   64|       |		var c: String
+   65|     10|		init(i: Int) {
+   66|     10|			self.i = i
+   67|     10|			self.c = "a"
+   68|     10|		}
+   69|       |	}
+   70|      0|	func testArraySortingByKeyPath() {
+   71|      0|
+   72|      0|		var zipedArray = (0...9).reversed().map(ZippedForSortingTest.init)
+   73|      0|		zipedArray.sort(keyPath: \.i)
+   74|      0|		let expect = (0...9).map(ZippedForSortingTest.init)
+   75|      0|		XCTAssertEqual(zipedArray, expect)
+   76|      0|		let expectReversed = Array(expect.reversed())
+   77|      0|		let zippedReversed = expect.sorted(keyPath: \.i, ascending: false)
+   78|      0|		XCTAssertEqual(expectReversed, zippedReversed)
+   79|      0|	}
+   80|      0|	func testMapByKeyPath() {
+   81|      0|		let expert = (0...9).map {$0}
+   82|      0|		let sample = expert.map(ZippedForSortingTest.init)
+   83|      0|		let result = sample.map(\.i)
+   84|      0|		XCTAssertEqual(expert, result)
+   85|      0|	}
+   86|      1|	func testReduceByKeyPath() {
+   87|      1|		let sample = (0...9).map(ZippedForSortingTest.init)
+   88|     10|		let expect = sample.reduce(0) {$0 + $1.i}
+   89|      1|		let result = sample.reduce(keyPath: \.i, 0, +)
+   90|      1|		XCTAssertEqual(expect, result)
+   91|      1|	}
+   92|       |}
+
+/Users/ios.yu/sbo-ios/lib/helperkit/HelperKitTests/HelperKitTests.swift:
+    1|       |//
+    2|       |//  HelperKitTests.swift
+    3|       |//  HelperKitTests
+    4|       |//
+    5|       |//  Created by 游宗諭 on 2019/9/6.
+    6|       |//  Copyright © 2019 ytyubox. All rights reserved.
+    7|       |//
+    8|       |
+    9|       |import XCTest
+   10|       |@testable import HelperKit
+   11|       |
+   12|       |class HelperKitTests: XCTestCase {
+   13|       |
+   14|      0|    func testSubArray() {
+   15|      0|        let array = [0, 1, 2, 3, 4]
+   16|      0|        XCTAssertEqual(4, array.subArray(range: 0...3).count)
+   17|      0|        XCTAssertEqual(2, array.subArray(range: 0...1).count)
+   18|      0|        XCTAssertEqual(1, array.subArray(range: 0...0).count)
+   19|      0|        let array2 = [0]
+   20|      0|        XCTAssertEqual(1, array2.subArray(range: 0...3).count)
+   21|      0|        XCTAssertEqual(1, array2.subArray(range: 0...1).count)
+   22|      0|        XCTAssertEqual(1, array2.subArray(range: 0...0).count)
+   23|      0|    }
+   24|      0|    func testSubArrayOfKey() {
+   25|      0|        let s = ["s1", "s2", "s3"]
+   26|      0|        let index = 2
+   27|      0|        let key = s[index]
+   28|      0|        let subs = s.subArray(where: {$0 == key})
+   29|      0|        XCTAssert(s.subArray(range: 0...index) == subs)
+   30|      0|        XCTAssert(s.subArray(where: {$0 == ""}) == [])
+   31|      0|
+   32|      0|    }
+   33|       |
+   34|      0|    func testArraySafe() {
+   35|      0|        let list = [1, 2]
+   36|      0|        var index = 3
+   37|      0|        let output = list.safe[index]
+   38|      0|        XCTAssertNil(output)
+   39|      0|        index = 1
+   40|      0|        XCTAssertEqual(list[index], list.safe[index])
+   41|      0|    }
+   42|       |}
+

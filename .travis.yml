@@ -10,4 +10,4 @@ script:
   - (swift build)
   - (swift test)
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -J "^Weak$" 
+  - curl -s https://codecov.io/bash | bash
