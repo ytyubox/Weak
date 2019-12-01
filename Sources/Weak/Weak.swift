@@ -16,11 +16,10 @@ public struct Weak<Weaked: AnyObject>: WeakProtocol, ExpressibleByNilLiteral, Cu
 	
 	/// A textual representation of this instance.
 	public var description: String {
-		if let object = object {
-			return "Weak(" + String(reflecting: object) + ")"
-		} else {
-			return "nil"
-		}
+		guard
+			let object = object
+			else { return "nil"}
+		return "Weak(" + String(reflecting: object) + ")"
 	}
 	
 	/// Creates an instance for an optional object.

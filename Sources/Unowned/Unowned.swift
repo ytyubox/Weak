@@ -24,11 +24,11 @@ public struct Unowned<UnowndObject: AnyObject>: UnownedProtocol, CustomStringCon
 	
 	/// A textual representation of this instance.
 	public var description: String {
-		"Unowned(" + String(reflecting: object) + ")"
+		"Unowned(" + String(reflecting: object!) + ")"
 	}
 	
 	/// Creates an instance for an object.
-	public init(_ object: UnowndObject) {
+	public init(_ object: UnowndObject?) {
 		self.object = object
 	}
 	
@@ -57,7 +57,7 @@ extension Sequence where Iterator.Element: AnyObject {
 
 /// Returns a Boolean value indicating whether two references point to the same object instance.
 public func === <U1, U2>(lhs: U1?, rhs: U2?) -> Bool where U1: UnownedProtocol, U2:UnownedProtocol {
-	 lhs?.object === rhs?.object
+	lhs?.object === rhs?.object
 }
 
 /// Returns a Boolean value indicating whether two references point to the same object instance.
@@ -91,14 +91,10 @@ public func !== <U>(lhs: AnyObject?, rhs: U?) -> Bool  where U: UnownedProtocol 
 }
 
 /// Returns a Boolean value indicating whether two references point to different object instances.
-public func !== <U: UnownedProtocol, W: WeakProtocol>(lhs: U?, rhs: W?) -> Bool {
+public func !== <U, W>(lhs: U?, rhs: W?) -> Bool where U: UnownedProtocol, W: WeakProtocol {
 	lhs?.object !== rhs?.object
 }
 
-/// Returns a Boolean value indicating whether two unowned objects are equal.
-public func == <U>(lhs: U?, rhs: U?) -> Bool where U:UnownedProtocol, U.UnownedObject: Equatable {
-	lhs?.object == rhs?.object
-}
 
 /// Returns a Boolean value indicating whether an unowned object and an optional object are equal.
 public func == <U>(lhs: U?, rhs: U.UnownedObject?) -> Bool where U:UnownedProtocol, U.UnownedObject: Equatable {
@@ -109,18 +105,20 @@ public func == <U>(lhs: U?, rhs: U.UnownedObject?) -> Bool where U:UnownedProtoc
 public func == <U>(lhs: U.UnownedObject?, rhs: U?) -> Bool where U:UnownedProtocol, U.UnownedObject: Equatable {
 	lhs == rhs?.object
 }
-
-/// Returns a Boolean value indicating whether two unowned objects are not equal.
-public func != <U>(lhs: U?, rhs: U?) -> Bool where U:UnownedProtocol, U.UnownedObject: Equatable {
-	lhs?.object != rhs?.object
+public func == <U,W>(lhs: U?, rhs: W?) -> Bool where U:UnownedProtocol, U.UnownedObject: Equatable, W:WeakProtocol, U.UnownedObject == W.Weaked {
+	lhs?.object == rhs?.object
 }
+
 
 /// Returns a Boolean value indicating whether an unowned object and an optional object are not equal.
 public func != <U>(lhs: U?, rhs: U.UnownedObject?) -> Bool where U:UnownedProtocol, U.UnownedObject: Equatable {
 	lhs?.object != rhs
 }
 
-/// Returns a Boolean value indicating whether an optional object and an unowned object are not equal.
 public func != <U>(lhs: U.UnownedObject?, rhs: U?) -> Bool where U:UnownedProtocol, U.UnownedObject: Equatable {
 	lhs != rhs?.object
+}
+
+public func != <U, W>(lhs: U?, rhs: W?) -> Bool where U:UnownedProtocol, U.UnownedObject: Equatable, W:WeakProtocol, U.UnownedObject == W.Weaked{
+	lhs?.object != rhs?.object
 }
