@@ -10,4 +10,5 @@ script:
   - (swift test)
   - xcodebuild -scheme Weak -destination platform="macOS" -enableCodeCoverage YES -derivedDataPath .build/derivedData  build test
 after_success:
+  - bash <(ls -al)
   - bash <(curl -s https://codecov.io/bash) -J "^Weak$" 
