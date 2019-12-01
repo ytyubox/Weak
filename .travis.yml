@@ -4,15 +4,10 @@ language: swift
 osx_image: xcode11
 env:
   - PROJECT_NAME=Weak
-before_install:
- rvm use $RVM_RUBY_VERSION
 install: 
   - (swift package update)
-  - bundle install --without=documentation --path ../travis_bundle_dirhhhh
 script:
   - (swift build)
   - (swift test)
-  - xcodebuild -scheme Weak -destination platform="macOS" -enableCodeCoverage YES -derivedDataPath .build/derivedData  build test
 after_success:
-  - bash <(ls -al)
   - bash <(curl -s https://codecov.io/bash) -J "^Weak$" 
