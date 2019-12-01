@@ -4,7 +4,11 @@ language: swift
 osx_image: xcode11
 env:
   - PROJECT_NAME=Weak
-install: (swift package update)
+before_install:
+ rvm use $RVM_RUBY_VERSION
+install: 
+  - (swift package update)
+  - bundle install --without=documentation --path ../travis_bundle_dirhhhh
 script:
   - (swift build)
   - (swift test)

@@ -1,0 +1,6 @@
+coverage_service: cobertura_xml
+scheme: Weak 
+configuration: TestedConfiguration
+ignore:
+  - ExamplePodCode/*
+  - ProjectTestsGroup/*
